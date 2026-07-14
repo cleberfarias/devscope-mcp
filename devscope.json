@@ -1,0 +1,28 @@
+{
+  "project": {
+    "name": "devscope-mcp",
+    "description": "Inteligência de projeto para agentes de desenvolvimento"
+  },
+  "git": {
+    "baseBranch": "main",
+    "remote": "origin"
+  },
+  "paths": {
+    "backend": ["src/devscope"],
+    "frontend": [],
+    "tests": ["tests"],
+    "documentation": ["README.md", ".devscope"]
+  },
+  "ignore": [
+    ".git", ".venv", "venv", "node_modules", "dist", "build",
+    "coverage", "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"
+  ],
+  "security": {
+    "profile": "read-only"
+  },
+  "instructions": {
+    "agentsFile": "AGENTS.md"
+  },
+  "max_file_size_kb": 512,
+  "max_search_results": 50
+}

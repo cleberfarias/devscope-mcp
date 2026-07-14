@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "devscope-local": {
+      "type": "stdio",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "devscope.server",
+        "--project-root",
+        "${workspaceFolder}",
+        "--config",
+        "${workspaceFolder}\\devscope.json"
+      ]
+    }
+  }
+}
