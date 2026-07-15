@@ -2,6 +2,7 @@ from pathlib import Path
 
 from devscope.models.config import DevScopeConfig
 from devscope.models.responses import SearchMatch, SearchResult
+from devscope.security.paths import resolve_inside_root
 
 
 class CodeSearch:
@@ -13,11 +14,7 @@ class CodeSearch:
         if not query.strip():
             raise ValueError("A busca não pode ser vazia.")
         limit = min(max_results or self.config.max_search_results, 200)
-        start = (self.root / path).resolve()
-        try:
-            start.relative_to(self.root)
-        except ValueError as exc:
-            raise ValueError("O caminho de busca deve estar dentro do projeto.") from exc
+        start = resolve_inside_root(self.root, path)
 
         matches: list[SearchMatch] = []
         ignored = set(self.config.ignore)

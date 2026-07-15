@@ -23,7 +23,27 @@ A configuração gerada é a mesma em todos os sistemas. O VS Code inicia o coma
 
 Docker, Node.js e Ripgrep são opcionais. O comando `doctor` informa o que está disponível.
 
-## Instalação para desenvolvimento
+## Instalação
+
+Para usar o DevScope em qualquer projeto, sem clonar este repositório:
+
+```bash
+pipx install devscope-mcp
+```
+
+Ou, sem `pipx`:
+
+```bash
+pip install devscope-mcp
+```
+
+Isso coloca `devscope` e `devscope-mcp` no PATH, prontos para o `devscope init`
+descrito abaixo.
+
+## Instalação para desenvolvimento do devscope-mcp
+
+Só necessário se você for alterar o próprio código deste servidor, não para usá-lo
+em outro projeto.
 
 ```bash
 python -m venv .venv
