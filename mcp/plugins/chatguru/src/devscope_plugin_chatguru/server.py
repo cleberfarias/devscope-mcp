@@ -11,6 +11,7 @@ from mcp.server.fastmcp import FastMCP
 
 from devscope_plugin_chatguru import __version__
 from devscope_plugin_chatguru.health import check_service_health
+from devscope_plugin_chatguru.security import validate_base_url
 
 mcp = FastMCP("DevScope Plugin: ChatGuru")
 
@@ -89,6 +90,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main() -> None:
     global _state
     args = parse_args()
+    if args.chatguru_base_url is not None:
+        validate_base_url(args.chatguru_base_url)
     _state = PluginContext(
         project_root=Path(args.project_root).expanduser().resolve(),
         profile=args.profile,

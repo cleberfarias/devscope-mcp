@@ -11,7 +11,8 @@ def test_check_service_health_ok(health_server: HTTPServer) -> None:
     result = check_service_health(base_url=base_url)
 
     assert result.status == "ok"
-    assert "ok" in result.detail
+    assert "200" in result.detail
+    assert "ok" not in result.detail.lower()  # corpo da resposta não deve vazar
 
 
 def test_check_service_health_missing_config(monkeypatch: pytest.MonkeyPatch) -> None:

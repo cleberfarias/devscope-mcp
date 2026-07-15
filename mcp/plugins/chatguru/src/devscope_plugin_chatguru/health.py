@@ -37,8 +37,10 @@ def check_service_health(
 
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
-            body = response.read().decode("utf-8", errors="ignore")
-            return ServiceHealth(status="ok", detail=body[:500])
+            # Não repassamos o corpo da resposta: o schema real do endpoint é
+            # desconhecido e poderia conter hostname interno, versão, stack ou
+            # outros detalhes que não deveriam chegar ao agente sem curadoria.
+            return ServiceHealth(status="ok", detail=f"HTTP {response.status} em {endpoint}")
     except urllib.error.HTTPError as exc:
         return ServiceHealth(status="error", detail=f"HTTP {exc.code} em {endpoint}")
     except urllib.error.URLError as exc:

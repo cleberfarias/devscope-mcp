@@ -13,10 +13,12 @@ Veja o desenho completo em [docs/architecture/overview.md](docs/architecture/ove
 
 | Componente | Pasta | Status |
 |---|---|---|
-| Servidor MCP (leitura de projeto, Git, busca de código) | [mcp/server](mcp/server) | Funcional, publicado como `devscope-mcp` |
+| Servidor MCP (leitura de projeto, Git, busca de código) | [mcp/server](mcp/server) | Funcional, publicado como `devscope-mcp` no PyPI |
+| Permissão e auditoria para plugins | [mcp/auth](mcp/auth) | Funcional, uso local (não publicado) |
+| Plugin ChatGuru | [mcp/plugins/chatguru](mcp/plugins/chatguru) | MVP com uma ação de leitura (`get_service_health`) — ainda dois processos MCP separados, não carregado pelo Core |
 | Skills (conhecimento de domínio) | [skills](skills) | Em construção — 2 skills reais |
 | Documentação de arquitetura | [docs/architecture](docs/architecture) | Fundação |
-| Orquestrador de agente, plugins MCP adicionais, RAG, UI, SDK | — | Roadmap, ainda não iniciados |
+| Orquestrador de agente, PluginRegistry unificado, RAG, UI, SDK | — | Roadmap, ainda não iniciados |
 
 Não existem pastas vazias reservando lugar para fases futuras — quando uma fase começa,
 a pasta nasce com conteúdo real no mesmo commit.
@@ -45,7 +47,10 @@ devscope/
 │   ├── git/
 │   └── architecture/
 ├── mcp/
-│   └── server/
+│   ├── server/
+│   ├── auth/
+│   └── plugins/
+│       └── chatguru/
 └── .vscode/
 ```
 

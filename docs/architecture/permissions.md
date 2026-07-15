@@ -123,11 +123,22 @@ global — não é uma configuração válida.
 
 ## Checklist antes de aceitar o primeiro plugin (ChatGuru)
 
-- [ ] Toda ação do plugin está listada com seu `kind` (`read` / `write_reversible` /
+Estado real em `mcp/plugins/chatguru` (uma ação, `get_service_health`, leitura):
+
+- [x] Toda ação do plugin está listada com seu `kind` (`read` / `write_reversible` /
       `write_destructive`) em um manifesto, não descoberta por inspeção do código.
 - [ ] Nenhuma ação `write_destructive` executa sem passar pelo protocolo de duas
-      etapas (`confirmation_token` + `confirm_action`).
-- [ ] Toda tentativa de ação grava uma linha em `.devscope/logs/audit.jsonl`.
-- [ ] Nenhuma credencial é aceita como parâmetro de ferramenta MCP.
+      etapas (`confirmation_token` + `confirm_action`). **Não se aplica ainda** —
+      não existe ação destrutiva real, e o protocolo em si não está implementado
+      (ver `mcp/auth/AGENTS.md`).
+- [x] Toda tentativa de ação grava uma linha em `.devscope/logs/audit.jsonl`.
+- [x] Nenhuma credencial é aceita como parâmetro de ferramenta MCP.
 - [ ] O plugin respeita restrição por-plugin em `devscope.json`, não só o perfil
-      global.
+      global. **Pendente** — o plugin hoje recebe o perfil direto por `--profile`
+      na CLI e nunca lê `devscope.json`; a restrição por-plugin descrita acima
+      ainda não está implementada em código.
+
+Ou seja: o plugin de leitura está funcional e auditado, mas a plataforma ainda não
+está pronta para aceitar uma ação de escrita — falta o `PluginRegistry` que resolve
+o perfil efetivo a partir de `devscope.json` antes de qualquer ação `write_*` ser
+aceita.

@@ -20,7 +20,9 @@ configure a URL do ChatGuru, não só no projeto de origem.
 ## Configuração
 
 - `--chatguru-base-url` (CLI) ou variável de ambiente lida por quem inicia o
-  processo: URL base da API. Não é segredo.
+  processo: URL base da API. Não é segredo, mas é validada uma vez no startup
+  (`security.validate_base_url`) — precisa ser `https`, não pode apontar para
+  `localhost`, IP privado/loopback/link-local ou host de metadata de nuvem.
 - `CHATGURU_API_TOKEN` (variável de ambiente, opcional): token de autenticação,
   lido diretamente do ambiente do processo dentro de `health.py` — nunca aceito
   como parâmetro de CLI ou de ferramenta MCP.
