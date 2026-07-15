@@ -8,9 +8,17 @@
     "remote": "origin"
   },
   "paths": {
-    "backend": ["mcp/server/src/devscope"],
+    "backend": [
+      "mcp/server/src/devscope",
+      "mcp/auth/src/devscope_auth",
+      "mcp/plugins/chatguru/src/devscope_plugin_chatguru"
+    ],
     "frontend": [],
-    "tests": ["mcp/server/tests"],
+    "tests": [
+      "mcp/server/tests",
+      "mcp/auth/tests",
+      "mcp/plugins/chatguru/tests"
+    ],
     "documentation": ["README.md", "docs", "skills"]
   },
   "ignore": [

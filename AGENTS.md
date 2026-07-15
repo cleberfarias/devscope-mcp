@@ -18,13 +18,19 @@ devscope/
 │   └── architecture/  desenho dos pilares, decisões e roadmap
 ├── skills/            conhecimento de domínio consultado pelo agente
 └── mcp/
-    └── server/         servidor MCP read-only (AGENTS.md próprio em mcp/server/AGENTS.md)
+    ├── server/         servidor MCP read-only (AGENTS.md próprio em mcp/server/AGENTS.md)
+    ├── auth/           permissão e auditoria para plugins (AGENTS.md em mcp/auth/AGENTS.md)
+    └── plugins/
+        └── chatguru/   primeiro plugin de execução (AGENTS.md em mcp/plugins/chatguru/AGENTS.md)
 ```
 
-Pastas descritas no roadmap (`mcp/plugins/`, `rag/`, `ui/`, `sdk/`) ainda não existem.
-Não crie stubs vazios para elas — cada uma nasce quando sua fase começar, com conteúdo
-real desde o primeiro commit. Consulte `docs/architecture/overview.md` para o roadmap
-completo antes de assumir que uma fase futura já começou.
+`mcp/plugins/chatguru` hoje tem uma única ação (`get_service_health`, leitura) —
+existe para validar o mecanismo de registro de plugin, permissão e auditoria de ponta
+a ponta, não como implementação completa do ChatGuru. Pastas restantes do roadmap
+(`rag/`, `ui/`, `sdk/`) ainda não existem. Não crie stubs vazios para elas — cada uma
+nasce quando sua fase começar, com conteúdo real desde o primeiro commit. Consulte
+`docs/architecture/overview.md` para o roadmap completo antes de assumir que uma fase
+futura já começou.
 
 ## Regras obrigatórias
 
@@ -33,11 +39,12 @@ completo antes de assumir que uma fase futura já começou.
 - Toda Skill nova precisa ser conhecimento real e verificável, nunca um placeholder
   ("TODO", "em breve"). Se não há conteúdo genuíno para uma Skill ainda, ela não deve
   ser criada.
-- Mudanças que executam ações reais em sistemas externos (Docker, Kafka, Redis,
-  Postgres, GitHub, Sentry etc., quando `mcp/plugins/` existir) seguem o modelo de
-  permissão e auditoria definido em
-  [docs/architecture/permissions.md](docs/architecture/permissions.md). Nenhum
-  plugin é aceito sem passar pelo checklist no final desse documento.
+- Toda ação de qualquer plugin em `mcp/plugins/*` que toque sistema externo (Docker,
+  Kafka, Redis, Postgres, GitHub, Sentry, ChatGuru etc.) segue o modelo de permissão
+  e auditoria definido em
+  [docs/architecture/permissions.md](docs/architecture/permissions.md), implementado
+  em `mcp/auth`. Nenhuma ação nova é aceita sem passar pelo checklist no final desse
+  documento.
 - O componente `mcp/server/` permanece somente leitura; suas regras próprias estão em
   `mcp/server/AGENTS.md` e têm precedência para qualquer mudança dentro dessa pasta.
 
