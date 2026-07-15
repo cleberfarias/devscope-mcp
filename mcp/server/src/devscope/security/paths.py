@@ -15,7 +15,8 @@ def resolve_project_root(raw_path: str | Path) -> Path:
 
 
 def resolve_inside_root(root: Path, raw_path: str | Path) -> Path:
-    candidate = (root / raw_path).resolve() if not Path(raw_path).is_absolute() else Path(raw_path).resolve()
+    path = Path(raw_path)
+    candidate = path.resolve() if path.is_absolute() else (root / path).resolve()
     try:
         candidate.relative_to(root)
     except ValueError as exc:

@@ -31,7 +31,8 @@ class GitService:
             counts = self._run("rev-list", "--left-right", "--count", f"{base_ref}...HEAD").split()
             behind, ahead = (int(counts[0]), int(counts[1])) if len(counts) == 2 else (0, 0)
             changed = self._parse_changed(self._run("diff", "--name-status", f"{base_ref}...HEAD"))
-            commits = self._parse_commits(self._run("log", "--format=%h%x09%s", f"{base_ref}..HEAD"))
+            log_output = self._run("log", "--format=%h%x09%s", f"{base_ref}..HEAD")
+            commits = self._parse_commits(log_output)
 
         if behind > 0:
             warnings.append(f"A branch está {behind} commit(s) atrás de {base_ref}.")

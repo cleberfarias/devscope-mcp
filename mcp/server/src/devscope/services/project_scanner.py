@@ -4,7 +4,6 @@ from pathlib import Path
 from devscope.models.config import DevScopeConfig
 from devscope.models.responses import Evidence, ProjectScanResult
 
-
 LANGUAGE_MARKERS = {
     ".py": "Python", ".js": "JavaScript", ".jsx": "JavaScript/JSX",
     ".ts": "TypeScript", ".tsx": "TypeScript/TSX", ".vue": "Vue",
@@ -50,8 +49,10 @@ class ProjectScanner:
                 }.items():
                     if dep in deps:
                         frameworks.add(label)
-                        evidence.append(Evidence(file="package.json", reason=f"Dependência {dep} encontrada"))
-                for dep, label in {"vitest": "Vitest", "jest": "Jest", "playwright": "Playwright"}.items():
+                        reason = f"Dependência {dep} encontrada"
+                        evidence.append(Evidence(file="package.json", reason=reason))
+                test_deps = {"vitest": "Vitest", "jest": "Jest", "playwright": "Playwright"}
+                for dep, label in test_deps.items():
                     if dep in deps or f"@{dep}/test" in deps:
                         tests.add(label)
             except (json.JSONDecodeError, OSError):
@@ -67,7 +68,8 @@ class ProjectScanner:
             if marker in python_text.lower():
                 (tests if label == "pytest" else frameworks).add(label)
 
-        if any((self.root / name).exists() for name in ["Dockerfile", "docker-compose.yml", "compose.yml"]):
+        docker_markers = ["Dockerfile", "docker-compose.yml", "compose.yml"]
+        if any((self.root / name).exists() for name in docker_markers):
             infrastructure.add("Docker")
         if (self.root / ".github/workflows").exists():
             infrastructure.add("GitHub Actions")

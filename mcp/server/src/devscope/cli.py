@@ -45,7 +45,9 @@ def _run_version(command: list[str]) -> str | None:
     return output[0] if output else "disponível"
 
 
-def _tool_check(name: str, executable: str, version_args: list[str], required: bool = False) -> CheckResult:
+def _tool_check(
+    name: str, executable: str, version_args: list[str], required: bool = False
+) -> CheckResult:
     path = shutil.which(executable)
     if not path:
         return CheckResult(name, "missing", "não encontrado no PATH", required)
@@ -154,7 +156,32 @@ def init_project(root: Path, base_branch: str | None = None, force: bool = False
             }
         }
     }
-    agents = f"""# Instruções para agentes\n\n## Projeto\n\nProjeto: `{root.name}`.\n\n## Git\n\n- A branch base é `{branch}`.\n- Não faça commit diretamente na branch base.\n- Analise o impacto antes de alterar componentes compartilhados.\n\n## Segurança\n\n- Não exponha credenciais, tokens ou dados sensíveis.\n- Não execute comandos destrutivos.\n- Informe claramente validações que não puderam ser executadas.\n\n## Validação\n\nAntes de concluir uma tarefa:\n\n1. Analise o diff em relação a `{branch}`.\n2. Execute verificações de sintaxe, lint e testes relacionados quando disponíveis.\n3. Informe riscos, arquivos impactados e evidências.\n"""
+    agents = f"""# Instruções para agentes
+
+## Projeto
+
+Projeto: `{root.name}`.
+
+## Git
+
+- A branch base é `{branch}`.
+- Não faça commit diretamente na branch base.
+- Analise o impacto antes de alterar componentes compartilhados.
+
+## Segurança
+
+- Não exponha credenciais, tokens ou dados sensíveis.
+- Não execute comandos destrutivos.
+- Informe claramente validações que não puderam ser executadas.
+
+## Validação
+
+Antes de concluir uma tarefa:
+
+1. Analise o diff em relação a `{branch}`.
+2. Execute verificações de sintaxe, lint e testes relacionados quando disponíveis.
+3. Informe riscos, arquivos impactados e evidências.
+"""
 
     results = {
         "devscope.json": _write_json(root / "devscope.json", config, force),
@@ -207,11 +234,16 @@ def _print_doctor(result: dict[str, Any]) -> None:
         print("\nProjeto:")
         for key, value in project.items():
             print(f"  {key}: {value}")
-    print("\nAmbiente essencial pronto." if result["ready"] else "\nFaltam dependências obrigatórias.")
+    if result["ready"]:
+        print("\nAmbiente essencial pronto.")
+    else:
+        print("\nFaltam dependências obrigatórias.")
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="devscope", description="DevScope project intelligence CLI")
+    parser = argparse.ArgumentParser(
+        prog="devscope", description="DevScope project intelligence CLI"
+    )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 

@@ -36,9 +36,12 @@ class CodeSearch:
             if file.stat().st_size > self.config.max_file_size_kb * 1024:
                 continue
             try:
-                for number, line in enumerate(file.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
+                text = file.read_text(encoding="utf-8", errors="ignore")
+                for number, line in enumerate(text.splitlines(), 1):
                     if query_lower in line.lower():
-                        matches.append(SearchMatch(file=str(relative), line=number, excerpt=line.strip()[:300]))
+                        excerpt = line.strip()[:300]
+                        match = SearchMatch(file=str(relative), line=number, excerpt=excerpt)
+                        matches.append(match)
                         if len(matches) >= limit:
                             truncated = True
                             return SearchResult(query=query, matches=matches, truncated=truncated)

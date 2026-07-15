@@ -60,7 +60,7 @@ def search_code_context(query: str, path: str = ".", max_results: int = 50) -> d
 
 @mcp.tool()
 def get_task_context(task: str, keywords: list[str] | None = None) -> dict:
-    """Monta um contexto inicial de tarefa usando projeto, regras, Git e buscas por palavras-chave."""
+    """Monta contexto inicial de tarefa usando projeto, regras, Git e buscas por palavra-chave."""
     ctx = app()
     scanner = ProjectScanner(ctx.project_root, ctx.config).scan()
     result: dict = {
@@ -79,10 +79,12 @@ def get_task_context(task: str, keywords: list[str] | None = None) -> dict:
             "content": agents_file.read_text(encoding="utf-8", errors="ignore")[:12000],
         }
     else:
-        result["warnings"].append(f"Arquivo de instruções não encontrado: {ctx.config.instructions.agents_file}")
+        missing = ctx.config.instructions.agents_file
+        result["warnings"].append(f"Arquivo de instruções não encontrado: {missing}")
 
     try:
-        result["branch"] = GitService(ctx.project_root).analyze(ctx.config.git.base_branch).model_dump()
+        base_branch = ctx.config.git.base_branch
+        result["branch"] = GitService(ctx.project_root).analyze(base_branch).model_dump()
     except (ValueError, RuntimeError) as exc:
         result["warnings"].append(str(exc))
 
@@ -100,7 +102,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="DevScope MCP server")
     parser.add_argument("--project-root", default=".", help="Diretório raiz do projeto analisado")
     parser.add_argument("--config", default=None, help="Caminho opcional para devscope.json")
-    parser.add_argument("--print-config", action="store_true", help="Mostra a configuração resolvida e encerra")
+    parser.add_argument(
+        "--print-config", action="store_true", help="Mostra a configuração resolvida e encerra"
+    )
     return parser.parse_args(argv)
 
 

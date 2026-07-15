@@ -1,30 +1,46 @@
-# DevScope MCP — instruções para agentes
+# DevScope — instruções para agentes
 
-## Objetivo
+## O que é este repositório
 
-Construir um servidor MCP somente leitura que entregue contexto verificável sobre código, Git e regras do projeto.
+Este é o monorepo da DevScope AI Platform. Ele reúne os componentes que juntos dão a
+agentes de IA contexto confiável sobre um projeto de software: documentação viva,
+especialistas de domínio (Skills) e ferramentas de execução (MCP).
+
+Cada componente tem seu próprio `AGENTS.md` com regras específicas. Este arquivo cobre
+apenas o que é válido para o repositório como um todo.
+
+## Estrutura
+
+```text
+devscope/
+├── AGENTS.md          este arquivo
+├── docs/
+│   └── architecture/  desenho dos pilares, decisões e roadmap
+├── skills/            conhecimento de domínio consultado pelo agente
+└── mcp/
+    └── server/         servidor MCP read-only (AGENTS.md próprio em mcp/server/AGENTS.md)
+```
+
+Pastas descritas no roadmap (`mcp/plugins/`, `rag/`, `ui/`, `sdk/`) ainda não existem.
+Não crie stubs vazios para elas — cada uma nasce quando sua fase começar, com conteúdo
+real desde o primeiro commit. Consulte `docs/architecture/overview.md` para o roadmap
+completo antes de assumir que uma fase futura já começou.
 
 ## Regras obrigatórias
 
-- Não criar ferramentas genéricas de execução de shell.
-- Não modificar arquivos do projeto analisado.
-- Não executar `git reset`, `git checkout`, `git clean`, `git push` ou comandos equivalentes.
-- Toda conclusão sobre código deve incluir arquivo, linha ou outra evidência quando possível.
-- Nunca escrever logs em stdout durante o transporte stdio; usar stderr.
-- Caminhos recebidos devem permanecer dentro da raiz configurada.
-
-## Arquitetura
-
-- `server.py`: ligação com o protocolo MCP e registro das ferramentas.
-- `services/`: lógica testável sem dependência direta do protocolo.
-- `models/`: contratos Pydantic.
-- `security/`: validação de caminhos e futuras políticas.
+- Não adicionar pastas ou arquivos de fases futuras do roadmap sem decisão explícita
+  registrada em `docs/architecture/overview.md`.
+- Toda Skill nova precisa ser conhecimento real e verificável, nunca um placeholder
+  ("TODO", "em breve"). Se não há conteúdo genuíno para uma Skill ainda, ela não deve
+  ser criada.
+- Mudanças que executam ações reais em sistemas externos (Docker, Kafka, Redis,
+  Postgres, GitHub, Sentry etc., quando `mcp/plugins/` existir) exigem um modelo de
+  permissão e auditoria explícitos antes do primeiro plugin — nunca depois.
+- O componente `mcp/server/` permanece somente leitura; suas regras próprias estão em
+  `mcp/server/AGENTS.md` e têm precedência para qualquer mudança dentro dessa pasta.
 
 ## Validação
 
-Antes de concluir uma mudança:
-
-1. Executar `ruff check .`.
-2. Executar `pytest`.
-3. Verificar se o servidor importa corretamente.
-4. Confirmar que nenhum `print()` operacional escreve em stdout.
+Antes de concluir uma mudança em qualquer componente, execute a validação específica
+descrita no `AGENTS.md` daquele componente (por exemplo, `mcp/server/AGENTS.md` define
+`ruff check .`, `pytest` e a checagem de import do servidor).

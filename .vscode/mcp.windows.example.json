@@ -2,7 +2,7 @@
   "servers": {
     "devscope-local": {
       "type": "stdio",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "command": "${workspaceFolder}\\mcp\\server\\.venv\\Scripts\\python.exe",
       "args": [
         "-m",
         "devscope.server",
