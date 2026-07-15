@@ -8,12 +8,15 @@ from devscope import server
 from devscope.config import load_config
 from devscope.context import AppContext
 from devscope.security.paths import PathSecurityError
+from devscope.services.project_scanner import ProjectScanner
 
 
 @pytest.fixture(autouse=True)
 def _reset_app() -> Iterator[None]:
+    server._scan_cache.clear()
     yield
     server._app = None
+    server._scan_cache.clear()
 
 
 def _init_app(tmp_path: Path) -> None:
@@ -54,6 +57,28 @@ def test_scan_project_detects_python_manifest(tmp_path: Path) -> None:
 
     assert "Python" in result["languages"]
     assert "pyproject.toml" in result["important_files"]
+
+
+def test_scan_project_reuses_cache_within_ttl(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    (tmp_path / "main.py").write_text("print('hi')\n", encoding="utf-8")
+    _init_app(tmp_path)
+    calls = 0
+    original_scan = ProjectScanner.scan
+
+    def counting_scan(self: ProjectScanner) -> object:
+        nonlocal calls
+        calls += 1
+        return original_scan(self)
+
+    monkeypatch.setattr(ProjectScanner, "scan", counting_scan)
+
+    first = server.scan_project()
+    second = server.scan_project()
+
+    assert first == second
+    assert calls == 1
 
 
 def test_analyze_current_branch_requires_git_repo(tmp_path: Path) -> None:

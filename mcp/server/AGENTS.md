@@ -23,6 +23,11 @@ Construir um servidor MCP somente leitura que entregue contexto verificável sob
 - `services/`: lógica testável sem dependência direta do protocolo.
 - `models/`: contratos Pydantic.
 - `security/`: validação de caminhos e futuras políticas.
+- `cache.py`: `TTLCache` genérico. Hoje só `scan_project` usa (30s de TTL) — troca
+  deliberada entre não reescanear o projeto inteiro a cada chamada e tolerar alguns
+  segundos de desatualização. `search_code_context` propositalmente não usa cache:
+  resultado de busca é citado como evidência de arquivo/linha, e desatualização ali
+  é um risco de correção, não só de performance.
 
 ## Validação
 
