@@ -34,8 +34,10 @@ completo antes de assumir que uma fase futura já começou.
   ("TODO", "em breve"). Se não há conteúdo genuíno para uma Skill ainda, ela não deve
   ser criada.
 - Mudanças que executam ações reais em sistemas externos (Docker, Kafka, Redis,
-  Postgres, GitHub, Sentry etc., quando `mcp/plugins/` existir) exigem um modelo de
-  permissão e auditoria explícitos antes do primeiro plugin — nunca depois.
+  Postgres, GitHub, Sentry etc., quando `mcp/plugins/` existir) seguem o modelo de
+  permissão e auditoria definido em
+  [docs/architecture/permissions.md](docs/architecture/permissions.md). Nenhum
+  plugin é aceito sem passar pelo checklist no final desse documento.
 - O componente `mcp/server/` permanece somente leitura; suas regras próprias estão em
   `mcp/server/AGENTS.md` e têm precedência para qualquer mudança dentro dessa pasta.
 

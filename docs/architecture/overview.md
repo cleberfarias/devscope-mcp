@@ -38,8 +38,10 @@ estruturado e verificável em vez de deixá-lo inferir tudo a partir de busca te
    componente. RAG (busca semântica sobre esse conteúdo) é roadmap, não implementado.
 3. **Execution** — ferramentas que executam ações reais e controladas. Hoje é o
    `mcp/server`, somente leitura. Plugins adicionais (Docker, Kafka, Redis, Postgres,
-   GitHub, Sentry, ChatGuru) são roadmap e exigem modelo de permissão e auditoria
-   próprios antes de existir — não são uma extensão trivial do servidor read-only atual.
+   GitHub, Sentry, ChatGuru) são roadmap; o modelo de permissão e auditoria que eles
+   vão seguir já está desenhado em
+   [permissions.md](permissions.md) — não são uma extensão trivial do servidor
+   read-only atual.
 4. **Observability** — logs, métricas, tracing e saúde de sistemas. Roadmap.
 5. **Architecture Intelligence** — entendimento automático de arquitetura,
    dependências e impacto de mudanças. Parcialmente coberto hoje pelo
@@ -87,7 +89,9 @@ Resposta com evidência (arquivo, linha, comando executado)
 
 - **Fase 1 — Fundação** (em andamento): `AGENTS.md`, documentação de arquitetura,
   primeiras Skills reais.
-- **Fase 2 — Core**: `mcp/plugins/*`, SDK, expansão da CLI.
+- **Fase 2 — Core**: `mcp/plugins/*`, SDK, expansão da CLI. O modelo de permissão e
+  auditoria ([permissions.md](permissions.md)) já está desenhado; falta implementá-lo
+  e construir o primeiro plugin (ChatGuru) sobre ele.
 - **Fase 3 — Conhecimento**: RAG, playbooks, runbooks, ADRs.
 - **Fase 4 — Interface**: dashboard web (saúde do projeto, diagnósticos, arquitetura,
   agentes).
