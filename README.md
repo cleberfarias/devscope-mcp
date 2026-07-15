@@ -1,5 +1,7 @@
 # DevScope
 
+[![CI](https://github.com/cleberfarias/devscope-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/cleberfarias/devscope-mcp/actions/workflows/ci.yml)
+
 Plataforma de inteligência de engenharia para agentes de IA. O objetivo é que um
 agente (GitHub Copilot, Claude Code, Codex, Cursor, VS Code Agent etc.) entenda um
 projeto de software — arquitetura, convenções, histórico e infraestrutura — sem

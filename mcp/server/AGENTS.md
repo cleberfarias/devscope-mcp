@@ -29,6 +29,10 @@ Construir um servidor MCP somente leitura que entregue contexto verificável sob
 Antes de concluir uma mudança:
 
 1. Executar `ruff check .`.
-2. Executar `pytest`.
-3. Verificar se o servidor importa corretamente.
-4. Confirmar que nenhum `print()` operacional escreve em stdout.
+2. Executar `mypy` (modo strict; todo módulo novo precisa de tipos completos).
+3. Executar `pytest`.
+4. Verificar se o servidor importa corretamente.
+5. Confirmar que nenhum `print()` operacional escreve em stdout.
+
+A CI (`.github/workflows/ci.yml`) roda os passos 1–4 em Ubuntu, Windows e macOS a
+cada push/PR na `master`. Uma mudança que falha localmente falha lá também.

@@ -1,4 +1,5 @@
 import json
+from collections.abc import Iterator
 from pathlib import Path
 
 from devscope.models.config import DevScopeConfig
@@ -90,7 +91,7 @@ class ProjectScanner:
             evidence=evidence[:20],
         )
 
-    def _iter_files(self):
+    def _iter_files(self) -> Iterator[Path]:
         ignored = set(self.config.ignore)
         for path in self.root.rglob("*"):
             try:

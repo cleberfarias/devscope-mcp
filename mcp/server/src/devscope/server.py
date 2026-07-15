@@ -2,6 +2,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
@@ -37,14 +38,14 @@ def health_check() -> dict[str, str]:
 
 
 @mcp.tool()
-def scan_project() -> dict:
+def scan_project() -> dict[str, Any]:
     """Mapeia linguagens, frameworks, testes, infraestrutura e arquivos importantes."""
     ctx = app()
     return ProjectScanner(ctx.project_root, ctx.config).scan().model_dump()
 
 
 @mcp.tool()
-def analyze_current_branch(base_branch: str | None = None) -> dict:
+def analyze_current_branch(base_branch: str | None = None) -> dict[str, Any]:
     """Analisa a branch atual em relação à branch base configurada, sem modificar o Git."""
     ctx = app()
     base = base_branch or ctx.config.git.base_branch
@@ -52,18 +53,18 @@ def analyze_current_branch(base_branch: str | None = None) -> dict:
 
 
 @mcp.tool()
-def search_code_context(query: str, path: str = ".", max_results: int = 50) -> dict:
+def search_code_context(query: str, path: str = ".", max_results: int = 50) -> dict[str, Any]:
     """Busca texto no código do projeto e retorna arquivo, linha e trecho como evidência."""
     ctx = app()
     return CodeSearch(ctx.project_root, ctx.config).search(query, path, max_results).model_dump()
 
 
 @mcp.tool()
-def get_task_context(task: str, keywords: list[str] | None = None) -> dict:
+def get_task_context(task: str, keywords: list[str] | None = None) -> dict[str, Any]:
     """Monta contexto inicial de tarefa usando projeto, regras, Git e buscas por palavra-chave."""
     ctx = app()
     scanner = ProjectScanner(ctx.project_root, ctx.config).scan()
-    result: dict = {
+    result: dict[str, Any] = {
         "task": task,
         "project": scanner.model_dump(),
         "instructions": None,
